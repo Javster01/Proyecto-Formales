@@ -1,0 +1,2 @@
+puts "Ingresa un número:"
+
