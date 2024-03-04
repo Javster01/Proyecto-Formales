@@ -10,6 +10,7 @@ compiler = Tk()
 compiler.title('Compilador Ruby/Julia')
 #se crea un arreglo de texto vacio para poner el path del archivo a abrir o a guardar
 file_path = ''
+
 class AutomataRuby:
     def __init__(self):
         self.estado_actual = 'inicial'
@@ -122,6 +123,7 @@ class AutomataRuby:
                         self.errors.append(f"Error: Número incorrecto de argumentos para la función '{function}'.")
     def report_errors(self):
         return "\n".join(self.errors)
+
 class AutomataJulia:
     def __init__(self):
         self.estado_actual = 'inicial'
