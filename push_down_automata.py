@@ -206,7 +206,7 @@ def open_file():
         code_output.delete("1.0", END)
         detected_language = detect_language(code)
 
-
+        
         # AQUI SE PONE EL OUTPUT DEL ANALISIS EN ESTE CASO EL TIPO DE LENGUAJE
 
 
@@ -216,6 +216,14 @@ def open_file():
         editor.insert('1.0', code)
         set_file_path(path)
         codigo_julia = code
+
+        if(len(codigo_julia)>500):
+                code_output.insert("1.0","El codigo supera los 500 caracteres teniendo "+str(len(codigo_julia)))
+                return
+        if(len(codigo_julia)<50):
+                code_output.insert("1.0","El codigo es inferior a 50 caracteres teniendo "+str(len(codigo_julia)))
+                return
+        
         print("La cadena es de tamaño: ", len(codigo_julia))
         automata = AutomataJulia()
         codigo = re.split('\n|\r|\b" "', codigo_julia)
