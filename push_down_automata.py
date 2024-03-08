@@ -107,6 +107,7 @@ class AutomataRuby:
                         self.errors.append(f"Error: Número incorrecto de argumentos para la función '{function}'.")
     def report_errors(self):
         return "\n".join(self.errors)
+    
 class AutomataJulia:
     def __init__(self):
         self.estado_actual = 'inicial'
