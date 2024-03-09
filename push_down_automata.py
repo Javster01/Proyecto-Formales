@@ -119,7 +119,7 @@ class AutomataJulia:
 
     def estados(self, simbolo, stack, count,pos):
         self.analisis+="q" + str(count) + " Stack:" + str(stack.items)+ "\n"
-        print(simbolo)
+
         try:
             if re.search('^println|print',simbolo):
                 stack.apilar("salida en linea "+str(pos))
@@ -140,7 +140,7 @@ class AutomataJulia:
                 self.states = count+1
                 self.estados(re.sub('^(?!println\()\w+','',simbolo),stack,self.states,pos)
             elif re.search('^\(.+\)$', simbolo) and len(stack.items)!=0 and(re.findall(stack.items[len(stack.items)-1],'^salida en linea \d+')!=None or re.findall(stack.items[len(stack.items)-1],'^funcion en linea \d+')!=None) and not re.sub('^estadistica en linea \d*','',stack.items[len(stack.items)-1])=='':
-                print('bbbbbb')
+
                 stack.desapilar()
             elif re.search('^if\s+[^;\n]+;?', simbolo):
                 stack.apilar("condicional en linea "+str(pos))
@@ -160,7 +160,7 @@ class AutomataJulia:
                 stack.apilar("estadistica en linea "+str(pos))
                 self.estados(re.sub('^(mean|median|var|std|mode)','',simbolo),stack,self.states,pos)
             elif re.search('^\(([A-Za-z]*|\[([0-9]*(\.|,|;|\s)*)*\])(,\s*dims\s*=\s*(\(\s*\d+,\s*\d+\)|\d*))?\)$', simbolo) and len(stack.items)!=0 and(re.findall(stack.items[len(stack.items)-1],'estadistica en linea \d+')!=None):
-                print('nbvhbdf')
+
                 stack.desapilar()
 
         except E:
