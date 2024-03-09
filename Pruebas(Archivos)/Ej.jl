@@ -2,7 +2,11 @@ A = rand(3,2)
 
 mean(A)
 
-mean([1,2,3,4], dim=(1,2), dim=2)
+calcular(mdvb)
+median([1 2; 3 4], dims=1)
+a = [1,2,3.6,10.9
+
+mean([1,2,3,4], dims=(1,2), dims = 5)
 
 data = [1,2,3,4
 

@@ -127,17 +127,20 @@ class AutomataJulia:
                 self.estados(simbolo.replace('println',''),stack,self.states,pos)
             elif re.search('^puts ".+"$', simbolo) or re.search('^gets.chomp+', simbolo) or re.search('^def +', simbolo) or re.search('^loop +', simbolo) or re.search('^until +', simbolo) :
                 stack.apilar('Ruby en linea '+str(pos))
-            elif re.search('^\w+ =', simbolo):
+            elif re.search('^([A-Za-z]*(_)?)*\s=', simbolo):
+                print("apila")
                 stack.apilar("variable en linea "+str(pos))
                 self.states = count+1
-                self.estados(re.sub('^\w+ ','',simbolo),stack,self.states,pos)
-            elif re.search('^= \[?\d+(?:,\s*\d+)*\]$|^= \d+$|^= [A-Za-z]*\((\d|,)*\)$', simbolo):
+                self.estados(re.sub('^([A-Za-z]*(_)?)*\s','',simbolo),stack,self.states,pos)
+            elif re.search('^= \[?\d+(?:,\s*\d+)*\]$|^= \d+$|^= [A-Za-z]*\((\d|,)*\)|^=(\s*\w*(\(.+\))?\s*[\+\-\*\/]?)*$', simbolo):
+                print("desapila")
                 stack.desapilar()
             elif re.search('^(?!(println|mean|median|var|std|mode)\()\w+\(',simbolo):
                 stack.apilar("funcion en linea "+str(pos))
                 self.states = count+1
                 self.estados(re.sub('^(?!println\()\w+','',simbolo),stack,self.states,pos)
-            elif re.search('^\(.+\)$', simbolo) and len(stack.items)!=0 and(re.findall(stack.items[len(stack.items)-1],'salida en linea \d+')!=None or re.findall(stack.items[len(stack.items)-1],'funcion en linea \d+')!=None):
+            elif re.search('^\(.+\)$', simbolo) and len(stack.items)!=0 and(re.findall(stack.items[len(stack.items)-1],'^salida en linea \d+')!=None or re.findall(stack.items[len(stack.items)-1],'^funcion en linea \d+')!=None) and not re.sub('^estadistica en linea \d*','',stack.items[len(stack.items)-1])=='':
+                print('bbbbbb')
                 stack.desapilar()
             elif re.search('^if\s+[^;\n]+;?', simbolo):
                 stack.apilar("condicional en linea "+str(pos))
@@ -156,10 +159,12 @@ class AutomataJulia:
             elif re.search('^(mean|median|var|std|mode)\(',simbolo):
                 stack.apilar("estadistica en linea "+str(pos))
                 self.estados(re.sub('^(mean|median|var|std|mode)','',simbolo),stack,self.states,pos)
-            elif re.search('^\(([A-Za-z]|\[([0-9]*(\.|,|;)*)*\])(,\s*dims\s*=\s*(\(\s*\d+,\s*\d+\)|\d*))?\)$', simbolo) and len(stack.items)!=0 and(re.findall(stack.items[len(stack.items)-1],'estadistica en linea \d+')!=None):
+            elif re.search('^\(([A-Za-z]*|\[([0-9]*(\.|,|;|\s)*)*\])(,\s*dims\s*=\s*(\(\s*\d+,\s*\d+\)|\d*))?\)$', simbolo) and len(stack.items)!=0 and(re.findall(stack.items[len(stack.items)-1],'estadistica en linea \d+')!=None):
+                print('nbvhbdf')
                 stack.desapilar()
 
-        except:
+        except E:
+            print(E)
             stack.apilar("Error en linea "+str(pos))
             pass
 
