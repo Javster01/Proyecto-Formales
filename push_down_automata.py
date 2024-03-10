@@ -1,5 +1,6 @@
 from stack import Pila
 import re
+import tkinter as tk
 from tkinter import *
 #se exporta filedialog de tkinder para poder guardar archivos y abrir archivos de cualquier tipo
 from tkinter.filedialog import asksaveasfilename, askopenfilename
@@ -304,6 +305,8 @@ def set_file_path(path):
 # Ejemplo de uso
 if __name__ == "__main__":
 
+    
+
     menu_bar = Menu(compiler)
 
     # se agrega el menu desplegable a tkinder
@@ -324,11 +327,14 @@ if __name__ == "__main__":
     compiler.config(menu=menu_bar)
 
     # se agrega un espacio de texto para el codigo y se empaqueta con el resto de la interfaz tkinder
-    editor = Text()
-    editor.pack()
+    #editor = Text()
+    editor = tk.Text(compiler)
+    editor.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     # se agrega un espacio de texto para el output del codigo que contendra analisis de lenguaje, semantico y sintactico
-    code_output = Text(height=10)
-    code_output.pack()
+    #code_output = Text(height=10)
+    #code_output.pack()
+    code_output = tk.Text(compiler, height=10)
+    code_output.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
     compiler.mainloop()
