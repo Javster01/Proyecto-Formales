@@ -1,5 +1,5 @@
 A = rand(3,2)
-
+A = rand(3,3)
 mean(A)
 
 calcular(mdvb)
@@ -17,4 +17,11 @@ median(data)
 var(data)
 
 std([1,2,5.5,8.6,8])
+
+for num in numeros
+    if num > media
+        println(num)
+        mean(data)
+    end
+end
 

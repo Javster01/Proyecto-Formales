@@ -22,7 +22,7 @@ class AutomataRuby:
     def estados(self, simbolo, stack, count,pos):
         try:
             self.analisis+="q" + str(count) + " Stack:" + str(stack.items)+ "\n"
-
+            print(simbolo)
             if re.search('^print',simbolo) or re.search('^puts ',simbolo):
                 print('entra')
                 stack.apilar("salida en linea "+str(pos))
@@ -35,7 +35,7 @@ class AutomataRuby:
                 self.estados(re.sub('^\w+ ','',simbolo),stack,self.states,pos)
             elif re.search('^= .+', simbolo):
                 stack.desapilar()
-            elif re.search('^(?!println\()\w+\(',simbolo):
+            elif re.search('^(?!(println\(|(mean|mode|median|variance|standard_deviation)\())\w+\(',simbolo):
                 stack.apilar("funcion en linea "+str(pos))
                 self.states = count+1
                 self.estados(re.sub('^(?!println\()\w+','',simbolo),stack,self.states,pos)
@@ -60,7 +60,20 @@ class AutomataRuby:
                 stack.apilar("Ciclo en linea "+str(pos))
             elif re.search('^\s*until\s+[^;\n]+ do;?\s*', simbolo):
                 stack.apilar("Ciclo en linea "+str(pos))
-        except:
+            elif re.search('^require',simbolo):
+                stack.apilar('libreria en la linea '+str(pos))
+                self.estados(re.sub('^require ','',simbolo),stack,self.states,pos)
+            elif re.search('^\'.+\'$',simbolo):
+                stack.desapilar()
+            elif re.search('^\w*\.|^\((\d*(\.*|,))*\).|^\[(\d*(\.|,)*)*\].',simbolo):
+                print('entra1')
+                stack.apilar('estadistica en la linea '+str(pos))
+                self.estados(re.sub('^\w*\.|^\((\d*(\.*|,))*\).|^\[(\d*(\.|,)*)*\].','',simbolo),stack,self.states,pos)
+            elif re.search('^(mean|mode|median|variance|standard_deviation)(\(.+\))?', simbolo):
+                print('entra2')
+                stack.desapilar()
+        except E:
+            print(E)
             stack.apilar("Error en linea "+str(pos))
             pass
 
@@ -121,11 +134,13 @@ class AutomataJulia:
         self.analisis+="q" + str(count) + " Stack:" + str(stack.items)+ "\n"
 
         try:
+            print(simbolo)
             if re.search('^println|print',simbolo):
                 stack.apilar("salida en linea "+str(pos))
                 self.states = count+1
-                self.estados(simbolo.replace('println',''),stack,self.states,pos)
-            elif re.search('^puts ".+"$', simbolo) or re.search('^gets.chomp+', simbolo) or re.search('^def +', simbolo) or re.search('^loop +', simbolo) or re.search('^until +', simbolo) :
+                simbolo= simbolo.replace('println','')
+                self.estados(simbolo.replace('print',''),stack,self.states,pos)
+            elif re.search('^puts ".+"$|^require', simbolo) or re.search('^gets.chomp+', simbolo) or re.search('^def +', simbolo) or re.search('^loop +', simbolo) or re.search('^until +', simbolo) :
                 stack.apilar('Ruby en linea '+str(pos))
             elif re.search('^([A-Za-z]*(_)?)*\s=', simbolo):
                 print("apila")
